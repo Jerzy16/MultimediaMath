@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Magic Battle</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="game-container">
+    <!-- Pantalla de inicio -->
+    <div id="title-screen" class="title-screen">
+      <div class="title-background"></div>
+      <div class="title-content">
+        <h1>MATH MAGIC <span>BATTLE</span></h1>
+        <div class="wizard-character"></div>
+        <button class="start-button" onclick="startGame()">TOUCH TO START</button>
+        <div class="game-description">
+          <p>¡Demuestra tus habilidades matemáticas y conviértete en el maestro de los números!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menú de selección -->
+    <div id="menu-screen" class="menu-screen" style="display: none;">
+      <div class="menu-background"></div>
+      <div class="menu-content">
+        <h2>ELIGE TU BATALLA</h2>
+        
+        <div class="selection-section">
+          <h3>OPERACIÓN MATEMÁTICA</h3>
+          <div class="operation-selector">
+            <button class="operation-btn" onclick="selectOperation('add')">
+              <img src="images/suma.png" alt="Suma">
+              <span>SUMA</span>
+            </button>
+            <button class="operation-btn" onclick="selectOperation('subtract')">
+              <img src="images/resta.png" alt="Resta">
+              <span>RESTA</span>
+            </button>
+            <button class="operation-btn" onclick="selectOperation('multiply')">
+              <img src="images/producto.png" alt="Multiplicación">
+              <span>MULTIPLICACIÓN</span>
+            </button>
+            <button class="operation-btn" onclick="selectOperation('divide')">
+              <img src="images/division.png" alt="División">
+              <span>DIVISIÓN</span>
+            </button>
+            <button class="operation-btn mixed" onclick="selectOperation('mixed')">
+              <img src="images/mixed-icon.png" alt="Mixto">
+              <span>MIXTO</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="selection-section">
+          <h3>NIVEL DE DIFICULTAD</h3>
+          <div class="level-selector">
+            <div class="level-option" onclick="selectLevel(1)">
+              <img src="images/fondo2.jpg" alt="Nivel 1">
+              <div class="level-info">
+                <h4>APRENDIZ</h4>
+                <p>Números del 1 al 10</p>
+              </div>
+            </div>
+            <div class="level-option" onclick="selectLevel(2)">
+              <img src="images/fondo3.jpg" alt="Nivel 2">
+              <div class="level-info">
+                <h4>MAGO</h4>
+                <p>Números del 1 al 50</p>
+              </div>
+            </div>
+            <div class="level-option" onclick="selectLevel(3)">
+              <img src="images/fondo4.jpg" alt="Nivel 3">
+              <div class="level-info">
+                <h4>ARCHIMAGO</h4>
+                <p>Números del 1 al 100</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-buttons">
+          <button class="home-button" onclick="goHome()">
+            <img src="images/home-icon.png" alt="Inicio">
+          </button>
+          <button class="start-game-button" onclick="startBattle()">
+            <span>COMENZAR BATALLA</span>
+            <img src="images/start-icon.png" alt="Comenzar">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pantalla de juego -->
+    <div id="game-screen" class="game-screen" style="display: none;">
+      <div class="game-background" id="game-scene"></div>
+      <div class="game-content">
+        <div class="game-header">
+          <div class="score-display">
+            <div class="score-item">
+              <span>PUNTUACIÓN</span>
+              <span id="score">0</span>
+            </div>
+            <div class="score-item">
+              <span>RÉCORD</span>
+              <span id="highscore">0</span>
+            </div>
+            <div class="score-item">
+              <span>TIEMPO</span>
+              <span id="timer">60</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="question-container">
+          <div class="wizard-character animated" id="player-character"></div>
+          <div class="question-display" id="question-display"></div>
+          <div class="enemy-character animated" id="enemy-character"></div>
+        </div>
+
+        <div class="answer-options" id="answer-options">
+          <!-- Las opciones se generarán dinámicamente -->
+        </div>
+
+        <div class="game-buttons">
+          <button class="home-button" onclick="goHome()">
+            <img src="images/home-icon.png" alt="Inicio">
+          </button>
+          <button class="hint-button" onclick="showHint()">
+            <img src="images/hint-icon.png" alt="Pista">
+          </button>
+          <div class="lives-display">
+            <img src="images/heart-icon.png" alt="Vidas" class="life-icon">
+            <span id="lives">3</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback overlay -->
+      <div id="feedback-overlay" class="feedback-overlay hidden">
+        <div class="feedback-content">
+          <h2 id="feedback-title">¡CORRECTO!</h2>
+          <p id="feedback-message">+10 puntos</p>
+          <button class="next-button" onclick="nextQuestion()">CONTINUAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pantalla de resultados -->
+    <div id="result-screen" class="result-screen" style="display: none;">
+      <div class="result-background"></div>
+      <div class="result-content">
+        <h2>BATALLA TERMINADA</h2>
+        <div class="result-stats">
+          <div class="stat-item">
+            <span>PUNTUACIÓN FINAL</span>
+            <span id="final-score">0</span>
+          </div>
+          <div class="stat-item">
+            <span>RÉCORD PERSONAL</span>
+            <span id="final-highscore">0</span>
+          </div>
+          <div class="stat-item">
+            <span>OPERACIONES ACERTADAS</span>
+            <span id="correct-answers">0</span>/<span id="total-questions">0</span>
+          </div>
+        </div>
+        <div class="result-buttons">
+          <button class="retry-button" onclick="retryGame()">
+            <img src="images/retry-icon.png" alt="Reintentar">
+            <span>REINTENTAR</span>
+          </button>
+          <button class="menu-button" onclick="goToMenu()">
+            <img src="images/menu-icon.png" alt="Menú">
+            <span>MENÚ PRINCIPAL</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/main.js"></script>
+</body>
+</html>
